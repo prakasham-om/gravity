@@ -18,7 +18,7 @@ const BookDetailPage = () => {
   const fetchBook = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`http://localhost:5000/api/v1/books/${id}`);
+      const res = await axios.get(`https://gravity-b434.onrender.com/api/v1/books/${id}`);
       setBook(res.data.data.book);
       setReviews(res.data.data.reviews);
     } catch (err) {
@@ -34,7 +34,7 @@ const BookDetailPage = () => {
 
   const handleReviewSubmit = async (reviewData) => {
     try {
-      await axios.post(`http://localhost:5000/api/v1/reviews/${id}`, reviewData);
+      await axios.post(`https://gravity-b434.onrender.com/api/v1/reviews/${id}`, reviewData);
     } catch (err) {
       console.error(err);
     }

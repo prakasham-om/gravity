@@ -7,7 +7,7 @@ import SearchBar from '../components/SearchBar';
 import { useAuth } from '../context/AuthContext';
 
 // Set base URL for backend
-axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.baseURL = 'https://gravity-b434.onrender.com';
 
 const HomePage = () => {
   const [books, setBooks] = useState([]);

@@ -11,7 +11,7 @@ const ReviewFeed = ({ bookId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useContext(AuthContext);
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://gravity-b434.onrender.com';
   let socket;
 
   useEffect(() => {

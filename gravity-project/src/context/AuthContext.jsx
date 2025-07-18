@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
 
   const loadUser = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/v1/auth/me');
+      const res = await axios.get('https://gravity-b434.onrender.com/api/v1/auth/me');
       setUser(res.data.data.user);
     } catch (err) {
       logout(); // token invalid or expired
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (formData) => {
     try {
-      const res = await axios.post('http://localhost:5000/api/v1/auth/register', formData);
+      const res = await axios.post('https://gravity-b434.onrender.com/api/v1/auth/register', formData);
       const token = res.data.token;
       setToken(token);
       setAuthToken(token);
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (formData) => {
     try {
-      const res = await axios.post('http://localhost:5000/api/v1/auth/login', formData);
+      const res = await axios.post('https://gravity-b434.onrender.com/api/v1/auth/login', formData);
       const token = res.data.token;
       setToken(token);
       setAuthToken(token);
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
 
   const addBook = async (bookData) => {
     try {
-      await axios.post('http://localhost:5000/api/v1/books', bookData);
+      await axios.post('https://gravity-b434.onrender.com/api/v1/books', bookData);
       toast.success('Book added successfully!');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to add book');
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchBooks = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/v1/books');
+      const res = await axios.get('https://gravity-b434.onrender.com/api/v1/books');
       setBooks(res.data.data.books); // ✅ FIXED setter name
     } catch (err) {
       toast.error('Failed to load books');
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
 
   const addToReadingList = async (bookId) => {
     try {
-      await axios.post(`http://localhost:5000/api/v1/books/${bookId}/reading-list`);
+      await axios.post(`https://gravity-b434.onrender.com/api/v1/books/${bookId}/reading-list`);
       await loadUser();
       toast.success('Added to your reading list');
     } catch (err) {
@@ -102,7 +102,7 @@ export const AuthProvider = ({ children }) => {
 
   const removeFromReadingList = async (bookId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/v1/books/${bookId}/reading-list`);
+      await axios.delete(`https://gravity-b434.onrender.com/api/v1/books/${bookId}/reading-list`);
       await loadUser();
       toast.success('Removed from your reading list');
     } catch (err) {

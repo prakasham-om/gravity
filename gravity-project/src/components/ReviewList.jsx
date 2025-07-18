@@ -16,7 +16,7 @@ const ReviewList = ({ bookId }) => {
   // Fetch reviews
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/v1/reviews/${bookId}`);
+      const res = await axios.get(`https://gravity-b434.onrender.com/api/v1/reviews/${bookId}`);
       setReviews(res.data.reviews);
     } catch (error) {
       console.error('Error fetching reviews:', error.message);
@@ -54,7 +54,7 @@ const ReviewList = ({ bookId }) => {
   const handleReplySubmit = async (reviewTextId) => {
     try {
       await axios.post(
-        `http://localhost:5000/api/v1/reviews/reply/${reviewTextId}`,
+        `https://gravity-b434.onrender.com/api/v1/reviews/reply/${reviewTextId}`,
         { text: replyTexts[reviewTextId] },
         {
           headers: {

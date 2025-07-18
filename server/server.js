@@ -6,7 +6,7 @@ import { Server } from 'socket.io';
 import connectDB from './config/db.js';
 
 import authRoutes from './routes/authRoute.js';
-import bookRoutes from './routes/bookRoute.js';
+import bookRoutes from './routes/BookRoute.js';
 import reviewRoutes from './routes/reviewRoute.js';
 
 dotenv.config();

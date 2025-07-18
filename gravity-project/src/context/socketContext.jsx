@@ -9,7 +9,7 @@ export const SocketProvider = ({ children }) => {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:5000'); // Change to your backend URL
+    const newSocket = io('https://gravity-b434.onrender.com'); // Change to your backend URL
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
