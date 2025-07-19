@@ -14,23 +14,34 @@ connectDB();
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: 'https://gravity-six-theta.vercel.app',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  },
-});
 
-app.use(cors());
+// ✅ CORS setup for REST & Socket.io
+const allowedOrigins = ['https://gravity-six-theta.vercel.app'];
+
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
+}));
+
 app.use(express.json());
 
+// ✅ Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/books', bookRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
 
-app.set('io', io); // For controller access
+// ✅ Socket.io setup
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins[0],
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+});
 
-// ✅ Socket.io Events
+app.set('io', io); // make io available in controllers
+
 io.on('connection', (socket) => {
   console.log('🟢 Client connected:', socket.id);
 
