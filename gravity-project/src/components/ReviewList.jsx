@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaReply } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/socketContext';
-import { toast } from 'react-toastify';
 
 const ReviewList = ({ bookId }) => {
   const { user } = useAuth();
   const { socket } = useSocket();
 
   const [reviews, setReviews] = useState([]);
-  const [replyInputs, setReplyInputs] = useState({});
-  const [replyTexts, setReplyTexts] = useState({});
 
   // Fetch reviews
   const fetchReviews = async () => {
@@ -28,49 +24,11 @@ const ReviewList = ({ bookId }) => {
 
     if (socket) {
       socket.on('newReview', fetchReviews);
-      socket.on('newReply', fetchReviews);
-
       return () => {
         socket.off('newReview');
-        socket.off('newReply');
       };
     }
   }, [bookId, socket]);
-
-  const handleReplyToggle = (reviewTextId) => {
-    setReplyInputs((prev) => ({
-      ...prev,
-      [reviewTextId]: !prev[reviewTextId],
-    }));
-  };
-
-  const handleReplyChange = (reviewTextId, value) => {
-    setReplyTexts((prev) => ({
-      ...prev,
-      [reviewTextId]: value,
-    }));
-  };
-
-  const handleReplySubmit = async (reviewTextId) => {
-    try {
-      await axios.post(
-        `https://gravity-b434.onrender.com/api/v1/reviews/reply/${reviewTextId}`,
-        { text: replyTexts[reviewTextId] },
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
-      );
-
-      setReplyTexts((prev) => ({ ...prev, [reviewTextId]: '' }));
-      setReplyInputs((prev) => ({ ...prev, [reviewTextId]: false }));
-      toast.success('Reply added');
-    } catch (error) {
-      toast.error('Failed to add reply');
-      console.error(error.message);
-    }
-  };
 
   return (
     <div className="p-4">
@@ -93,57 +51,7 @@ const ReviewList = ({ bookId }) => {
             >
               <p className="text-gray-700">{reviewText.text}</p>
 
-              <div className="flex items-center justify-between mt-2">
-                <button
-                  className="flex items-center text-sm text-blue-500 hover:text-blue-600"
-                  onClick={() => handleReplyToggle(reviewText._id)}
-                >
-                  <FaReply className="mr-1" /> Reply
-                </button>
-              </div>
-
-              {/* Reply Input */}
-              {replyInputs[reviewText._id] && (
-                <div className="mt-2">
-                  <textarea
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    rows={2}
-                    placeholder="Type your reply..."
-                    value={replyTexts[reviewText._id] || ''}
-                    onChange={(e) =>
-                      handleReplyChange(reviewText._id, e.target.value)
-                    }
-                  />
-                  <div className="flex justify-end mt-1 space-x-2">
-                    <button
-                      className="px-3 py-1 text-sm bg-gray-200 rounded-md"
-                      onClick={() => handleReplyToggle(reviewText._id)}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md"
-                      onClick={() => handleReplySubmit(reviewText._id)}
-                    >
-                      Submit
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Replies */}
-              {reviewText.replies?.length > 0 && (
-                <div className="ml-4 mt-2 space-y-1">
-                  {reviewText.replies.map((reply, index) => (
-                    <div
-                      key={index}
-                      className="text-sm text-gray-600 bg-gray-100 p-2 rounded-md"
-                    >
-                      <strong>{reply.user?.name || 'User'}:</strong> {reply.text}
-                    </div>
-                  ))}
-                </div>
-              )}
+              {/* Replies Removed */}
             </div>
           ))}
         </div>
