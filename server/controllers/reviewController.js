@@ -39,7 +39,7 @@ export const getReviewsByBook = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-export const replyToReview = async (req, res) => {
+export const addReply = async (req, res) => {
   try {
     const { reviewId } = req.params;
     const { text } = req.body;
