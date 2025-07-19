@@ -39,27 +39,32 @@ export const getReviewsByBook = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-export const addReply = async (req, res) => {
+export const replyToReview = async (req, res) => {
   try {
-    const { reviewId, reviewTextId } = req.params; // also pass reviewTextId
+    const { reviewId } = req.params;
     const { text } = req.body;
+
+    if (!text) return res.status(400).json({ message: 'Reply text required' });
 
     const review = await Review.findById(reviewId);
     if (!review) return res.status(404).json({ message: 'Review not found' });
 
-    const reviewTextEntry = review.reviewTexts.id(reviewTextId);
-    if (!reviewTextEntry) return res.status(404).json({ message: 'Review text not found' });
-
-    const reply = { user: req.user._id, text };
-    reviewTextEntry.replies.push(reply);
+    const reply = { text, user: req.user._id };
+    review.replies.push(reply);
     await review.save();
 
-    const io = req.app.get('io');
-    io.emit('newReply', { reviewId, reviewTextId, reply });
+    const populatedReview = await Review.findById(reviewId).populate('replies.user');
 
-    res.status(201).json({ success: true, reply });
+    // Emit to all clients
+    req.io.emit('new-reply', {
+      reviewId,
+      reply: populatedReview.replies.at(-1)
+    });
+
+    res.status(201).json({ message: 'Reply added', reply: populatedReview.replies.at(-1) });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
   }
 };
 export const deleteReview = async (req, res) => {
