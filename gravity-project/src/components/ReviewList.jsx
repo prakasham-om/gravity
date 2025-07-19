@@ -51,7 +51,6 @@ const ReviewList = ({ bookId }) => {
             >
               <p className="text-gray-700">{reviewText.text}</p>
 
-              {/* Replies Removed */}
             </div>
           ))}
         </div>
