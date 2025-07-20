@@ -9,7 +9,6 @@ const ReviewList = ({ bookId }) => {
 
   const [reviews, setReviews] = useState([]);
 
-  // Fetch reviews
   const fetchReviews = async () => {
     try {
       const res = await axios.get(`https://gravity-b434.onrender.com/api/v1/reviews/${bookId}`);
@@ -30,6 +29,14 @@ const ReviewList = ({ bookId }) => {
     }
   }, [bookId, socket]);
 
+  const renderStars = (count) => {
+    return [...Array(5)].map((_, index) => (
+      <span key={index}>
+        {index < count ? '★' : '☆'}
+      </span>
+    ));
+  };
+
   return (
     <div className="p-4">
       <h2 className="text-xl font-semibold mb-4 text-gray-800">Reviews</h2>
@@ -41,7 +48,9 @@ const ReviewList = ({ bookId }) => {
         >
           <div className="mb-2 text-gray-800">
             <strong>{review.user?.name || 'Anonymous'}</strong>
-            <span className="ml-2 text-yellow-600">Rating: {review.rating}</span>
+            <span className="ml-2 text-yellow-500">
+              {renderStars(review.rating)}
+            </span>
           </div>
 
           {review.reviewTexts.map((reviewText) => (
@@ -50,7 +59,6 @@ const ReviewList = ({ bookId }) => {
               className="mb-3 border-t pt-2 border-gray-200"
             >
               <p className="text-gray-700">{reviewText.text}</p>
-
             </div>
           ))}
         </div>
